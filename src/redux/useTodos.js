@@ -15,5 +15,9 @@ export const useTodos = () => {
 		dispatch(actions.deleteTodo(id));
 	};
 
-	return { todos, addNewTodo, deleteTodo };
+	const updateTaskStatus = id => {
+		dispatch(actions.updateTaskStatus(id));
+	};
+
+	return { todos, addNewTodo, deleteTodo, updateTaskStatus };
 };
