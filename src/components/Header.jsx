@@ -13,7 +13,7 @@ export const Header = () => {
 			<Navbar variant="light" bg="warning">
 				<Container fluid>
 					<Navbar.Brand>ToDo</Navbar.Brand>
-					<Button variant="outline-success" size="lg" onClick={toggleShow}>
+					<Button variant="outline-success" type="button" size="lg" onClick={toggleShow}>
 						Add TASK
 					</Button>
 					<FilterGroup />

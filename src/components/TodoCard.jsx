@@ -37,10 +37,10 @@ export const TodoCard = ({ data }) => {
 				</Card.Text>
 			</Card.Body>
 			<Card.Footer className="d-flex justify-content-between">
-				<Button variant="outline-primary" size="sm" onClick={toggleShow}>
+				<Button variant="outline-primary" type="button" size="sm" onClick={toggleShow}>
 					Edit
 				</Button>
-				<Button variant="outline-danger" size="sm" onClick={() => deleteTodo(id)}>
+				<Button variant="outline-danger" type="button" size="sm" onClick={() => deleteTodo(id)}>
 					Delete
 				</Button>
 			</Card.Footer>

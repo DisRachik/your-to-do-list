@@ -1,39 +1,55 @@
 import PropTypes from "prop-types";
-import { Button, Modal, Form } from "react-bootstrap";
+import { useRef, useState } from "react";
+import { Button, Modal, Form, Overlay, Tooltip } from "react-bootstrap";
 import { createPortal } from "react-dom";
+import * as Yup from "yup";
 import { useTodos } from "../redux/todos/useTodos";
-import { useState } from "react";
 
 const modalRoot = document.querySelector("#modal-root");
+
+const validationSchema = Yup.object().shape({
+	title: Yup.string().required("Task name is required"),
+	describe: Yup.string(),
+	taskStatus: Yup.bool(),
+});
 
 export const ModalForm = ({ show, handleClose, dataCard }) => {
 	const [title, setTitle] = useState(dataCard ? dataCard.title : "");
 	const [describe, setDescribe] = useState(dataCard ? dataCard.describe : "");
 	const [taskStatus, setTaskStatus] = useState(dataCard ? dataCard.taskStatus : false);
+	const [error, setError] = useState(null);
+	const inputRef = useRef();
 	const { addNewTodo, updateTodo } = useTodos();
 
-	const onSubmit = e => {
+	const onSubmit = async e => {
 		e.preventDefault();
 
-		const newTodo = {
-			title: title.trim(),
-			describe: describe.trim(),
-			taskStatus,
-		};
+		try {
+			await validationSchema.validate({ title, describe });
 
-		if (dataCard) {
-			updateTodo({ ...newTodo, id: dataCard.id });
-		} else {
-			addNewTodo(newTodo);
+			const newTodo = {
+				title: title.trim(),
+				describe: describe.trim(),
+				taskStatus,
+			};
+
+			if (dataCard) {
+				updateTodo({ ...newTodo, id: dataCard.id });
+			} else {
+				addNewTodo(newTodo);
+			}
+			setError(null);
+			handleClose();
+		} catch (error) {
+			setError(error.message);
 		}
-		handleClose();
 	};
 	return createPortal(
 		<Modal show={show} onHide={handleClose} centered>
-			<Modal.Header closeButton>
-				<Modal.Title bg="light-bg-subtle">Create new task</Modal.Title>
+			<Modal.Header closeButton bg="warning" style={{ backgroundColor: "#b7e4c7" }}>
+				<Modal.Title>Create new task</Modal.Title>
 			</Modal.Header>
-			<Modal.Body>
+			<Modal.Body style={{ backgroundColor: "#b7e4c7" }}>
 				<Form onSubmit={onSubmit}>
 					<Form.Group className="mb-3" controlId="title">
 						<Form.Label>Task name</Form.Label>
@@ -44,8 +60,18 @@ export const ModalForm = ({ show, handleClose, dataCard }) => {
 							value={title}
 							onChange={e => setTitle(e.target.value)}
 							autoFocus
+							ref={inputRef}
 						/>
 					</Form.Group>
+					{error && (
+						<Overlay show={true} target={inputRef.current} placement="top">
+							{props => (
+								<Tooltip id="overlay-error" {...props}>
+									{error}
+								</Tooltip>
+							)}
+						</Overlay>
+					)}
 					<Form.Group className="mb-3" controlId="describe">
 						<Form.Label>Describe task</Form.Label>
 						<Form.Control
@@ -66,12 +92,11 @@ export const ModalForm = ({ show, handleClose, dataCard }) => {
 							onChange={e => setTaskStatus(e.target.checked)}
 						/>
 					</Form.Group>
-					<Button variant="secondary" onClick={handleClose}>
-						Clear
-					</Button>
-					<Button variant="primary" type="submit">
-						Save Changes
-					</Button>
+					<Modal.Footer>
+						<Button variant="primary" type="submit" style={{ width: "100%" }}>
+							Save Changes
+						</Button>
+					</Modal.Footer>
 				</Form>
 			</Modal.Body>
 		</Modal>,

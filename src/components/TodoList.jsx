@@ -14,7 +14,7 @@ export const TodoList = () => {
 
 	return (
 		<Container>
-			<Row xs={1} sm={2} lg={3} xl={4} className="g-4 justify-content-center" style={{ marginTop: "2rem" }}>
+			<Row xs={1} sm={2} lg={3} xl={4} xxl={5} className="g-4 justify-content-center" style={{ marginTop: "2rem" }}>
 				{displayContacts &&
 					displayContacts.map(todo => (
 						<Col key={todo.id} className="d-flex justify-content-center">
