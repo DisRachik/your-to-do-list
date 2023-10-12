@@ -2,11 +2,12 @@ import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-import { todosSlice } from "./todosSlice";
+import { todosSlice } from "./todos/todosSlice";
 
 const todoPersistConfig = {
 	key: "todo",
 	storage,
+	blacklist: ["filter"],
 };
 
 export const store = configureStore({

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Container, Navbar } from "react-bootstrap";
 import { ModalForm } from "./ModalForm";
+import { FilterGroup } from "./FilterGroup";
 
 export const Header = () => {
 	const [show, setShow] = useState(false);
@@ -10,14 +11,15 @@ export const Header = () => {
 	return (
 		<>
 			<Navbar variant="light" bg="warning">
-				<Container>
+				<Container fluid>
 					<Navbar.Brand>ToDo</Navbar.Brand>
 					<Button variant="outline-success" size="lg" onClick={toggleShow}>
 						Add TASK
 					</Button>
+					<FilterGroup />
 				</Container>
 			</Navbar>
-			<ModalForm show={show} handleClose={toggleShow} />
+			{show && <ModalForm show={show} handleClose={toggleShow} />}
 		</>
 	);
 };

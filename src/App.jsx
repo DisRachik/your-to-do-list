@@ -1,5 +1,3 @@
-import "./App.css";
-
 import { Header, TodoList } from "components";
 
 function App() {

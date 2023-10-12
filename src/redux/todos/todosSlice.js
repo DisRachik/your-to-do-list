@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 
 const initialState = {
 	todos: [],
+	filter: "",
 };
 
 export const todosSlice = createSlice({
@@ -21,7 +22,13 @@ export const todosSlice = createSlice({
 		updateTaskStatus: (state, { payload }) => {
 			state.todos = state.todos.map(todo => (todo.id === payload ? { ...todo, taskStatus: !todo.taskStatus } : todo));
 		},
+		updateTodo: (state, { payload }) => {
+			state.todos = state.todos.map(todo => (todo.id === payload.id ? { ...todo, ...payload } : todo));
+		},
+		filterTodos: (state, { payload }) => {
+			state.filter = payload;
+		},
 	},
 });
 
-export const { addNewTodo, deleteTodo, updateTaskStatus } = todosSlice.actions;
+export const { addNewTodo, deleteTodo, updateTaskStatus, updateTodo, filterTodos } = todosSlice.actions;

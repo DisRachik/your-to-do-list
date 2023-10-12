@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
-import { selectTodos } from "./selectors";
+import { selectFilter, selectTodos } from "./selectors";
 
 import * as actions from "./todosSlice";
 
 export const useTodos = () => {
 	const dispatch = useDispatch();
 	const todos = useSelector(selectTodos);
+	const filter = useSelector(selectFilter);
 
 	const addNewTodo = newTodo => {
 		dispatch(actions.addNewTodo(newTodo));
@@ -19,5 +20,13 @@ export const useTodos = () => {
 		dispatch(actions.updateTaskStatus(id));
 	};
 
-	return { todos, addNewTodo, deleteTodo, updateTaskStatus };
+	const updateTodo = id => {
+		dispatch(actions.updateTodo(id));
+	};
+
+	const filterTodos = value => {
+		dispatch(actions.filterTodos(value));
+	};
+
+	return { todos, filter, addNewTodo, deleteTodo, updateTaskStatus, updateTodo, filterTodos };
 };

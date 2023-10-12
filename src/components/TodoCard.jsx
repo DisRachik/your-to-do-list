@@ -1,10 +1,15 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
-import { useTodos } from "../redux/useTodos";
+import { useTodos } from "../redux/todos/useTodos";
+import { ModalForm } from "./ModalForm";
 
 export const TodoCard = ({ data }) => {
 	const { title, describe, taskStatus, id } = data;
-	const { updateTaskStatus } = useTodos();
+	const { updateTaskStatus, deleteTodo } = useTodos();
+	const [show, setShow] = useState(false);
+
+	const toggleShow = () => setShow(prevState => !prevState);
 
 	return (
 		<Card
@@ -32,13 +37,15 @@ export const TodoCard = ({ data }) => {
 				</Card.Text>
 			</Card.Body>
 			<Card.Footer className="d-flex justify-content-between">
-				<Button variant="outline-secondary" size="sm">
+				<Button variant="outline-primary" size="sm" onClick={toggleShow}>
 					Edit
 				</Button>
-				<Button variant="outline-danger" size="sm">
+				<Button variant="outline-danger" size="sm" onClick={() => deleteTodo(id)}>
 					Delete
 				</Button>
 			</Card.Footer>
+
+			{show && <ModalForm show={show} handleClose={toggleShow} dataCard={data} />}
 		</Card>
 	);
 };
